@@ -93,5 +93,26 @@ namespace Nest.Tests.Integration
 				var settings = new ConnectionSettings(uri);
 			});
 		}
+		
+		[Test]
+		public void construct_client_with_null_auth_username()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Uri uri = new Uri("http://tempuri.com");
+				var settings = new ConnectionSettings(uri, null, "password");
+			});
+		}
+
+		[Test]
+		public void construct_client_with_null_auth_password()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Uri uri = new Uri("http://tempuri.com");
+				var settings = new ConnectionSettings(uri, "username", null);
+			});
+		}
+
 	}
 }

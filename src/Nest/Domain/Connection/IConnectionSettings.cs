@@ -17,6 +17,9 @@ namespace Nest
 		string Username { get; }
 		string Password { get; }
 
+		string AuthenticationUsername { get; }
+		string AuthenticationPassword { get; }
+
 		int MaximumAsyncConnections { get; }
 		bool UsesPrettyResponses { get; }
 		Uri Uri { get; }

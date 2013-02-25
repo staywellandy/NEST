@@ -54,6 +54,8 @@ namespace Nest
 			get { return this._uri; }
 		}
 
+		public string AuthenticationUsername { get; private set; }
+		public string AuthenticationPassword { get; private set; }
 
 		public int MaximumAsyncConnections { get; private set; }
 		public bool UsesPrettyResponses { get; private set; }
@@ -136,6 +138,85 @@ namespace Nest
 			this.MaximumAsyncConnections = 20;
 			this._defaultTypeIndices = new FluentDictionary<Type, string>();
 		}
+
+		/// <summary>
+		/// Instantiate a connectionsettings object to tell the client where and how to connect to elasticsearch
+		/// </summary>
+		/// <param name="uri">A Uri to describe the elasticsearch endpoint</param>
+		/// <param name="authenticationUsername">User name for server authentication</param>
+		/// <param name="authenticationPassword">Password for server authentication</param>
+		public ConnectionSettings(Uri uri, string authenticationUsername, string authenticationPassword) : this(uri, 60000, null, null, null, authenticationUsername, authenticationPassword) { }
+
+		/// <summary>
+		/// Instantiate a connectionsettings object to tell the client where and how to connect to elasticsearch
+		/// </summary>
+		/// <param name="uri">A Uri to describe the elasticsearch endpoint</param>
+		/// <param name="timeout">time out in milliseconds</param>
+		/// <param name="authenticationUsername">User name for server authentication</param>
+		/// <param name="authenticationPassword">Password for server authentication</param>
+		public ConnectionSettings(Uri uri, int timeout, string authenticationUsername, string authenticationPassword) : this(uri, timeout, null, null, null, authenticationUsername, authenticationPassword) { }
+
+		/// <summary>
+		/// Instantiate a connectionsettings object to tell the client where and how to connect to elasticsearch
+		/// using a proxy
+		/// </summary>
+		/// <param name="uri">A Uri to describe the elasticsearch endpoint</param>
+		/// <param name="timeout">time out in milliseconds</param>
+		/// <param name="proxyAddress">proxy address</param>
+		/// <param name="proxyUsername">proxy proxyUsername</param>
+		/// <param name="proxyPassword">proxy proxyPassword</param>
+		/// <param name="authenticationUsername">User name for server authentication</param>
+		/// <param name="authenticationPassword">Password for server authentication</param>
+		public ConnectionSettings(Uri uri, int timeout, string proxyAddress, string proxyUsername, string proxyPassword, string authenticationUsername, string authenticationPassword)
+			: this(uri, timeout, proxyAddress, proxyUsername, proxyPassword)
+		{
+			authenticationUsername.ThrowIfNull("authenticationUsername");
+			authenticationPassword.ThrowIfNull("authenticationPassword");
+
+			AuthenticationUsername = authenticationUsername;
+			AuthenticationPassword = authenticationPassword;
+		}
+
+		/// <summary>
+		/// Instantiate a connectionsettings object to tell the client where and how to connect to elasticsearch
+		/// </summary>
+		/// <param name="host">host (sans http(s)://), use the Uri constructor overload for more control</param>
+		/// <param name="port">port of the host (elasticsearch defaults on 9200)</param>
+		/// <param name="authenticationUsername">User name for server authentication</param>
+		/// <param name="authenticationPassword">Password for server authentication</param>
+		public ConnectionSettings(string host, int port, string authenticationUsername, string authenticationPassword) : this(host, port, 60000, null, null, null, authenticationUsername, authenticationPassword) { }
+
+		/// <summary>
+		/// Instantiate a connectionsettings object to tell the client where and how to connect to elasticsearch
+		/// </summary>
+		/// <param name="host">host (sans http(s)://), use the Uri constructor overload for more control</param>
+		/// <param name="port">port of the host (elasticsearch defaults on 9200)</param>
+		/// <param name="timeout">time out in milliseconds</param>
+		/// <param name="authenticationUsername">User name for server authentication</param>
+		/// <param name="authenticationPassword">Password for server authentication</param>
+		public ConnectionSettings(string host, int port, int timeout, string authenticationUsername, string authenticationPassword) : this(host, port, timeout, null, null, null, authenticationUsername, authenticationPassword) { }
+
+		/// <summary>
+		/// Instantiate a connectionsettings object to tell the client where and how to connect to elasticsearch
+		/// </summary>
+		/// <param name="host">host (sans http(s)://), use the Uri constructor overload for more control</param>
+		/// <param name="port">port of the host (elasticsearch defaults on 9200)</param>
+		/// <param name="timeout">time out in milliseconds</param>
+		/// <param name="proxyAddress">proxy address</param>
+		/// <param name="proxyUsername">proxy proxyUsername</param>
+		/// <param name="proxyPassword">proxy proxyPassword</param>
+		/// <param name="authenticationUsername">User name for server authentication</param>
+		/// <param name="authenticationPassword">Password for server authentication</param>
+		public ConnectionSettings(string host, int port, int timeout, string proxyAddress, string proxyUsername, string proxyPassword, string authenticationUsername, string authenticationPassword)
+			: this(host, port, timeout, proxyAddress, proxyUsername, proxyPassword)
+		{
+			authenticationUsername.ThrowIfNull("authenticationUsername");
+			authenticationPassword.ThrowIfNull("authenticationPassword");
+
+			AuthenticationUsername = authenticationUsername;
+			AuthenticationPassword = authenticationPassword;
+		}
+
 		/// <summary>
 		/// Index to default to when no index is specified.
 		/// </summary>

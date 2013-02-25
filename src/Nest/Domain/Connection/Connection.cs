@@ -137,6 +137,14 @@ namespace Nest
 				proxy.Credentials = credentials;
 				myReq.Proxy = proxy;
 			}
+
+			if (_ConnectionSettings.AuthenticationUsername != null && _ConnectionSettings.AuthenticationPassword != null)
+			{
+				string authorizationString = string.Format("{0}:{1}", _ConnectionSettings.AuthenticationUsername, _ConnectionSettings.AuthenticationPassword);
+				string encodedAuthorization = Convert.ToBase64String(Encoding.UTF8.GetBytes(authorizationString));
+				myReq.Headers.Add(HttpRequestHeader.Authorization, string.Format("Basic {0}", encodedAuthorization));
+			}
+
 			return myReq;
 		}
 
